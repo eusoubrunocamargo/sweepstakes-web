@@ -1,12 +1,12 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  templateUrl: 'app.html',
+  standalone: true,
+  imports: [IonApp, IonRouterOutlet], // <--- Importante para o HTML funcionar
 })
-export class App {
-  protected readonly title = signal('sweepstakes-web');
+export class AppComponent {
+  constructor() {}
 }

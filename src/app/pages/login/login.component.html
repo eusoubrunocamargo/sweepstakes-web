@@ -1,0 +1,62 @@
+<ion-content class = "ion-padding">
+
+  <div class = "flex flex-col justify-center min-h-[80vh] max-w-md mx-auto">
+
+    <div class = "text-center mb-8">
+      <h1 class = "text-3xl font-bold text-blue-600 mb-2">Bolão da Firmaaa!</h1>
+      <p class = "text-gray-500">Organize e participe num piscar de olhos!</p>
+    </div>
+
+    <div *ngIf = "currentStep === 'PHONE'" class= "animate-fade-in space-y-4">
+      <ion-item fill = "outline" mode = "md" class = "rounded-log">
+        <ion-label position = "floating">Whatsapp (com DDD)</ion-label>
+        <ion-input
+          type = "tel"
+          [(ngModel)] = "whatsapp"
+          placeholder = "(11) 99999-9999"
+          helperText = "Enviaremos um código SMS.">
+        </ion-input>
+      </ion-item>
+
+      <ion-button
+        expand = "block"
+        (click) = "onRequestOtp()"
+        [disabled] = "isLoading || whatsapp.length < 10"
+        class = "mt-6 h-12 font-bold">
+        <span *ngIf = "!isLoading">Continuar</span>
+        <ion-spinner *ngIf = "isLoading" name = "crescent"></ion-spinner>
+      </ion-button>
+    </div>
+
+    <div *ngIf = "currentStep === 'OTP'" class = "animate-fade-in space-y-4">
+
+      <p class = "text-center text-gray-600 mb-4">
+        Digite o código enviado para <span class = "font-bold">{{ whatsapp }}</span>
+      </p>
+
+      <ion-item fill = "outline" mode = "md" class = "rounded-lg">
+        <ion-label position = "floating">Código de 6 dígitos</ion-label>
+        <ion-input
+          type = "number"
+          [(ngModel)] = "otpCode"
+          maxLength = "6">
+        </ion-input>
+      </ion-item>
+
+      <ion-button
+        expand = "block"
+        (click) = "onValidateOtp()"
+        [disabled] = "isLoading || otpCode.length < 6"
+        class = "mt-6 h-12 font-bold">
+        <span *ngIf = "!isLoading">Entrar</span>
+        <ion-spinner *ngIf = "isLoading" name = "crescent"></ion-spinner>
+      </ion-button>
+
+      <button
+        (click) = "currentStep = 'PHONE'"
+        class = "w-full text-blue-500 text-sm mt-4 hover:underline">
+        Corrigir meu número
+      </button>
+    </div>
+  </div>
+</ion-content>
