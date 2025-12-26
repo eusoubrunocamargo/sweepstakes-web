@@ -33,35 +33,41 @@ export class AuthService {
   //send sms (post /otp/request)
 
   requestOtp(whatsapp: string): Observable<any> {
-    const cleanNumber = whatsapp.replace(/\D/g, '');
-    return this.http.post<any>(`${this.apiUrl}/otp/request`, { whatsapp: cleanNumber});
+    const formattedNumber = this.formatWhatsapp(whatsapp);
+    return this.http.post<any>(`${this.apiUrl}/otp/request`, { whatsapp: formattedNumber});
     }
 
   //validate code (post /otp/validate) and save session
 
   validateOtp(whatsapp: string, code: string): Observable<TokenResponse> {
-    const cleanNumber = whatsapp.replace(/\D/g, '');
+    const formattedNumber = this.formatWhatsapp(whatsapp);
     return this.http.post<TokenResponse>(`${this.apiUrl}/otp/validate`, {
-      whatsapp: cleanNumber,
+      whatsapp: formattedNumber,
       code
       }).pipe(
         tap(response => this.saveSession(response))
         );
     }
 
-  // helper to save @ browser
 
+  // helper to format whatsapp num
+  private formatWhatsapp(whatsapp: string): string {
+    let digits = whatsapp.replace(/\D/g, '');
+    if (digits.startsWith('55') && digits.length >= 12){
+      return '+' + digits;
+    }
+    return '+55' + digits;
+  }
+
+  // helper to save @ browser
   private saveSession(data: TokenResponse) {
     localStorage.setItem('auth_token', data.token);
     localStorage.setItem('user_data', JSON.stringify(data));
-
     }
 
   // helper to retrieve logged user
-
   getUser() {
     const data = localStorage.getItem('user_data');
     return data ? JSON.parse(data) : null;
-
     }
 }
