@@ -1,0 +1,31 @@
+<ion-content class="ion-padding">
+  <div class="flex flex-col justify-center min-h-[80vh] max-w-md mx-auto">
+
+    <div class="text-center mb-8 animate-fade-in">
+      <h1 class="text-2xl font-bold text-gray-800 mb-2">Olá! 👋</h1>
+      <p class="text-gray-500">Como gostaria de ser chamado nos bolões?</p>
+    </div>
+
+    <div class="space-y-4 animate-fade-in">
+      <ion-item fill="outline" mode="md" class="rounded-lg">
+        <ion-label position="floating">Seu Nome Completo</ion-label>
+        <ion-input
+          type="text"
+          [(ngModel)]="name"
+          autocapitalize="words"
+          placeholder="Ex: Bruno Camargo">
+        </ion-input>
+      </ion-item>
+
+      <ion-button
+        expand="block"
+        (click)="onSave()"
+        [disabled]="isLoading || name.length < 3"
+        class="mt-6 h-12 font-bold">
+        <span *ngIf="!isLoading">Começar</span>
+        <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>

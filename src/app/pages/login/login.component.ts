@@ -82,13 +82,13 @@ export class LoginComponent {
 
           console.log('New user -> redirect to fill profile');
 
-          //this.router.navigate(['/complete-profile']);
+          this.router.navigate(['/complete-profile']);
 
           } else {
 
             console.log('Existing user -> redirect Home');
 
-            //this.router.navigate(['/home']);
+            this.router.navigate(['/home']);
 
           }
 

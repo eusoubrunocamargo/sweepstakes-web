@@ -26,32 +26,24 @@ export interface TokenResponse {
 export class AuthService {
 
   private http = inject(HttpClient);
-
   private readonly apiUrl = 'http://localhost:8080/v1/auth';
 
   constructor() { }
 
   //send sms (post /otp/request)
 
-  requestOtp(whatsapp: string): Observable<void> {
-
+  requestOtp(whatsapp: string): Observable<any> {
     const cleanNumber = whatsapp.replace(/\D/g, '');
-
-    return this.http.post<void>(`${this.apiUrl}/otp/request`, { whatsapp: cleanNumber});
+    return this.http.post<any>(`${this.apiUrl}/otp/request`, { whatsapp: cleanNumber});
     }
 
   //validate code (post /otp/validate) and save session
 
   validateOtp(whatsapp: string, code: string): Observable<TokenResponse> {
-
     const cleanNumber = whatsapp.replace(/\D/g, '');
-
     return this.http.post<TokenResponse>(`${this.apiUrl}/otp/validate`, {
-
       whatsapp: cleanNumber,
-
       code
-
       }).pipe(
         tap(response => this.saveSession(response))
         );
@@ -60,9 +52,7 @@ export class AuthService {
   // helper to save @ browser
 
   private saveSession(data: TokenResponse) {
-
     localStorage.setItem('auth_token', data.token);
-
     localStorage.setItem('user_data', JSON.stringify(data));
 
     }
@@ -70,9 +60,7 @@ export class AuthService {
   // helper to retrieve logged user
 
   getUser() {
-
     const data = localStorage.getItem('user_data');
-
     return data ? JSON.parse(data) : null;
 
     }
