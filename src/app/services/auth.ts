@@ -1,7 +1,8 @@
-import { environment } from '../../environments/environment';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Observable , tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface AuthRequest {
   whatsapp: string;
@@ -27,6 +28,7 @@ export interface TokenResponse {
 export class AuthService {
 
   private http = inject(HttpClient);
+  private router = inject(Router);
   private readonly apiUrl = `${environment.apiUrl}/auth`;
 
   //send sms (post /otp/request)
@@ -34,7 +36,7 @@ export class AuthService {
   requestOtp(whatsapp: string): Observable<any> {
     const formattedNumber = this.formatWhatsapp(whatsapp);
     return this.http.post<any>(`${this.apiUrl}/otp/request`, { whatsapp: formattedNumber});
-    }
+  }
 
   //validate code (post /otp/validate) and save session
 
@@ -46,7 +48,7 @@ export class AuthService {
       }).pipe(
         tap(response => this.saveSession(response))
         );
-    }
+  }
 
 
   // helper to format whatsapp num
@@ -62,11 +64,32 @@ export class AuthService {
   private saveSession(data: TokenResponse) {
     localStorage.setItem('auth_token', data.token);
     localStorage.setItem('user_data', JSON.stringify(data));
-    }
+  }
 
   // helper to retrieve logged user
   getUser() {
     const data = localStorage.getItem('user_data');
     return data ? JSON.parse(data) : null;
-    }
+  }
+
+  // check if user is auth
+  isAuthenticated(): boolean {
+    const user = this.getUser();
+    return !!(user && user.token);
+  }
+
+  // return JWT
+  getToken(): string | null {
+    const user = this.getUser();
+    return user?.token ?? null;
+  }
+
+  // end session -> /login
+  logout(): void {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user_data');
+    void this.router.navigate(['/login']);
+  }
+
+
 }
