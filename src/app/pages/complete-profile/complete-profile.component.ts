@@ -28,23 +28,28 @@ export class CompleteProfileComponent {
 
     this.isLoading.set(true);
 
-    const user: any = this.authService.getUser();
+    const user = this.authService.getUser();
 
-    if (!user || !user.userId) {
+    if (!user) {
       alert('Error: Unidentified user. Login again.');
-      this.router.navigate(['/login']);
+      void this.router.navigate(['/login']);
       return;
       }
 
-    this.userService.updateName (user.userId, this.name()).subscribe({
+    this.userService.updateName (
+      user.userId,
+      this.name()).subscribe({
 
       next: () => {
         this.isLoading.set(false);
 
-        user.name = this.name();
-        user.isNewUser = false;
-        localStorage.setItem('user_data', JSON.stringify(user));
-        this.router.navigate(['/home']);
+        const updatedUser = {
+          ...user,
+          name: this.name(),
+          isNewUser: false
+        };
+        localStorage.setItem('user_data', JSON.stringify(updatedUser));
+        void this.router.navigate(['/home']);
         },
       error: (err) => {
         console.log(err);

@@ -1,3 +1,4 @@
+import { User } from '../models/user.model';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -14,12 +15,7 @@ export interface OtpVerification {
   code: string;
   }
 
-export interface TokenResponse {
-  token: string;
-  userId: string;
-  name: string;
-  isNewUser: boolean;
-  }
+export interface TokenResponse extends User {}
 
 @Injectable({
   providedIn: 'root',
@@ -67,9 +63,9 @@ export class AuthService {
   }
 
   // helper to retrieve logged user
-  getUser() {
+  getUser(): User | null {
     const data = localStorage.getItem('user_data');
-    return data ? JSON.parse(data) : null;
+    return data ? JSON.parse(data) as User : null;
   }
 
   // check if user is auth

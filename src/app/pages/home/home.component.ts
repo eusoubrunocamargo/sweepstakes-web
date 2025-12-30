@@ -19,8 +19,8 @@ export class HomeComponent {
 
   ionViewWillEnter() {
     // Busca o nome salvo no LocalStorage
-    const user: any = this.authService.getUser();
-    this.userName.set(user ? user.name : 'Visitante');
+    const user = this.authService.getUser();
+    this.userName.set(user?.name ?? 'Visitante');
   }
 
   logout() {
