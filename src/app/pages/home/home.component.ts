@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -15,12 +15,12 @@ export class HomeComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  userName = '';
+  userName = signal('');
 
   ionViewWillEnter() {
     // Busca o nome salvo no LocalStorage
     const user: any = this.authService.getUser();
-    this.userName = user ? user.name : 'Visitante';
+    this.userName.set(user ? user.name : 'Visitante');
   }
 
   logout() {

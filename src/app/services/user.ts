@@ -1,3 +1,4 @@
+import { environment } from '../../environments/environment';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -10,7 +11,7 @@ export class UserService {
 
   private http = inject(HttpClient);
 
-  private readonly apiUrl = 'http://localhost:8080/v1/users';
+  private readonly apiUrl = `${environment.apiUrl}/users`;
 
   updateName(userId: string, name: string): Observable<void> {
 

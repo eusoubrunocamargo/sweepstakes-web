@@ -1,3 +1,4 @@
+import { environment } from '../../environments/environment';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable , tap } from 'rxjs';
@@ -26,9 +27,7 @@ export interface TokenResponse {
 export class AuthService {
 
   private http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8080/v1/auth';
-
-  constructor() { }
+  private readonly apiUrl = `${environment.apiUrl}/auth`;
 
   //send sms (post /otp/request)
 

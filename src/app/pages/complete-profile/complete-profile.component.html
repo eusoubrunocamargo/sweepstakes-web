@@ -11,7 +11,8 @@
         <ion-label position="floating">Seu Nome Completo</ion-label>
         <ion-input
           type="text"
-          [(ngModel)]="name"
+          [ngModel]="name()"
+          (ngModelChange)="name.set($event)"
           autocapitalize="words"
           placeholder="Ex: Bruno Camargo">
         </ion-input>
@@ -20,10 +21,13 @@
       <ion-button
         expand="block"
         (click)="onSave()"
-        [disabled]="isLoading || name.length < 3"
+        [disabled]="isLoading() || name().length < 3"
         class="mt-6 h-12 font-bold">
-        <span *ngIf="!isLoading">Começar</span>
-        <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+        @if (!isLoading()) {
+        <span>Começar</span>
+        } @else {
+        <ion-spinner name="crescent"></ion-spinner>
+        }
       </ion-button>
     </div>
 
