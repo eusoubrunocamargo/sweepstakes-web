@@ -7,12 +7,14 @@
       <p class = "text-gray-500">Organize e participe num piscar de olhos!</p>
     </div>
 
-    <div *ngIf = "currentStep === 'PHONE'" class= "animate-fade-in space-y-4">
+    @if (currentStep() === 'PHONE') {
+    <div class= "animate-fade-in space-y-4">
       <ion-item fill = "outline" mode = "md" class = "rounded-log">
         <ion-label position = "floating">Whatsapp (com DDD)</ion-label>
         <ion-input
           type = "tel"
-          [(ngModel)] = "whatsapp"
+          [ngModel] = "whatsapp()"
+          (ngModelChange) = "whatsapp.set($event)"
           placeholder = "(11) 99999-9999"
           helperText = "Enviaremos um código SMS.">
         </ion-input>
@@ -21,24 +23,30 @@
       <ion-button
         expand = "block"
         (click) = "onRequestOtp()"
-        [disabled] = "isLoading || whatsapp.length < 10"
+        [disabled] = "isLoading() || whatsapp().length < 10"
         class = "mt-6 h-12 font-bold">
-        <span *ngIf = "!isLoading">Continuar</span>
-        <ion-spinner *ngIf = "isLoading" name = "crescent"></ion-spinner>
+        @if (!isLoading()){
+        <span>Continuar</span>
+        } @else {
+        <ion-spinner name = "crescent"></ion-spinner>
+        }
       </ion-button>
     </div>
+    }
 
-    <div *ngIf = "currentStep === 'OTP'" class = "animate-fade-in space-y-4">
+    @if (currentStep() === 'OTP') {
+    <div class = "animate-fade-in space-y-4">
 
       <p class = "text-center text-gray-600 mb-4">
-        Digite o código enviado para <span class = "font-bold">{{ whatsapp }}</span>
+        Digite o código enviado para <span class = "font-bold">{{ whatsapp() }}</span>
       </p>
 
       <ion-item fill = "outline" mode = "md" class = "rounded-lg">
         <ion-label position = "floating">Código de 6 dígitos</ion-label>
         <ion-input
           type = "number"
-          [(ngModel)] = "otpCode"
+          [ngModel] = "otpCode()"
+          (ngModelChange) = "otpCode.set($event)"
           maxLength = "6">
         </ion-input>
       </ion-item>
@@ -46,17 +54,21 @@
       <ion-button
         expand = "block"
         (click) = "onValidateOtp()"
-        [disabled] = "isLoading || otpCode.length < 6"
+        [disabled] = "isLoading() || otpCode().length < 6"
         class = "mt-6 h-12 font-bold">
-        <span *ngIf = "!isLoading">Entrar</span>
-        <ion-spinner *ngIf = "isLoading" name = "crescent"></ion-spinner>
+        @if (!isLoading()) {
+        <span>Entrar</span>
+        } @else {
+        <ion-spinner name = "crescent"></ion-spinner>
+        }
       </ion-button>
 
       <button
-        (click) = "currentStep = 'PHONE'"
+        (click) = "currentStep.set('PHONE')"
         class = "w-full text-blue-500 text-sm mt-4 hover:underline">
         Corrigir meu número
       </button>
     </div>
+    }
   </div>
 </ion-content>
